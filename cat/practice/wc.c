@@ -27,15 +27,12 @@ main(int argc, char *argv[])
 static void
 do_wc( char *path)
 {
-  int fd;
-  unsigned char buf[BUFFER_SIZE];
-  int n;
   unsigned long count = 0;
-
-  fd = open(path, O_RDONLY);
+  int fd = open(path, O_RDONLY);
   if (fd < 0) die(path);
   for (;;) {
-    n = read(fd, buf, BUFFER_SIZE);
+    unsigned char buf[BUFFER_SIZE];
+    int n = read(fd, buf, BUFFER_SIZE);
     if (n < 0) {
       die(path);
     }

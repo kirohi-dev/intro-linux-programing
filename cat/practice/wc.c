@@ -7,7 +7,7 @@
 
 static void do_wc(char *path);
 static void die(char *s);
-static void count_char(unsigned char *buf, char s);
+static unsigned long count_char(unsigned char *buf, size_t size, char s);
 
 int
 main(int argc, char *argv[])
@@ -30,6 +30,7 @@ do_wc( char *path)
   int fd;
   unsigned char buf[BUFFER_SIZE];
   int n;
+  unsigned long count = 0;
 
   fd = open(path, O_RDONLY);
   if (fd < 0) die(path);
@@ -41,21 +42,22 @@ do_wc( char *path)
     if (n == 0) {
       break;
     }
+    count += count_char(buf, sizeof buf,'\n');
   }
-  count_char(buf, '\n');
+  printf("\\ncount: %ld\n", count);
 }
 
-static void
-count_char(unsigned char *buf, char s)
+static unsigned long
+count_char(unsigned char *buf, size_t size, char s)
 {
-  int count;
+  unsigned long count = 0;
   unsigned long i;
-  for (i = 0; i < sizeof buf; i++) {
+  for (i = 0; i < size; i++) {
     if (buf[i] == s) {
       count++;
     }
   }
-  printf("%d\n", count);
+  return count;
 }
 
 static void
